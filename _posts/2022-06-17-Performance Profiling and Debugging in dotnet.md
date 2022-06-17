@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Performance Profiling and Debugging in .net
+title: Performance Profiling and Debugging
 ---
 
 
@@ -70,27 +70,27 @@ https://www.jetbrains.com/help/dotmemory/NET_Memory_Management_Concepts.html
 
 
 Any object larger than 85KB are store separately on the Large Object Heap (LOH). This is not compacted during normal garbage collection. The LOH will thus get fragmented over time. 
-```mermaid
-    flowchart LR
-        allocation(Allocation)
-        subgraph gen0
-            direction T
-            0_allocate_1(allocate some) --> 0_allocate_n(allocate more) --> 0_full(full) --> 0_GC_generation(Garbage collect Gen 0)
-            end
-         subgraph gen1
-            direction TB
-            1_allocate_1(moved into gen1) --> 1_allocate_n(moved even more into) --> 1_full(full) --> 1_GC_generation(Garbage collect Gen 1)
-            end
-        subgraph gen2
-            direction TB
-            2_allocate_1(moved into gen2) --> 2_allocate_n(moved even more into) --> 2_full(full) --> 2_GC_generation(Garbage collect Gen 2)
-            end
-        loh(Large Object Heap)
-        allocation  -->  gen0 & loh
-        gen0 -- still in use--> gen1
-        gen1 -- still in use--> gen2
+<div class="mermaid">
+flowchart LR
+    allocation(Allocation)
+    subgraph gen0
+        direction TB
+        0_allocate_1(allocate some) --> 0_allocate_n(allocate more) --> 0_full(full) --> 0_GC_generation(Garbage collect Gen 0)
+        end
+     subgraph gen1
+        direction TB
+        1_allocate_1(moved into gen1) --> 1_allocate_n(moved even more into) --> 1_full(full) --> 1_GC_generation(Garbage collect Gen 1)
+        end
+    subgraph gen2
+        direction TB
+        2_allocate_1(moved into gen2) --> 2_allocate_n(moved even more into) --> 2_full(full) --> 2_GC_generation(Garbage collect Gen 2)
+        end
+    loh(Large Object Heap)
+    allocation  -->  gen0 & loh
+    gen0 -- still in use--> gen1
+    gen1 -- still in use--> gen2
     
-```
+</div>
 
 ### Finding your roots
 A key factor in memory pressure is holding on to references as short as possible. The sooner the last reference to an object is released the quicker an object **can** be garbage collected.
