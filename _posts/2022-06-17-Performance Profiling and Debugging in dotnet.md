@@ -95,9 +95,10 @@ flowchart LR
 ### Finding your roots
 A key factor in memory pressure is holding on to references as short as possible. The sooner the last reference to an object is released the quicker an object **can** be garbage collected.
 Be cautious when adding delegates, event handlers etc to global or static scoped objects or methods. NB This also includes what singleton scoped dependency that is injected into your code. Most unwanted memory is due to this.
-```csharp
+```
 !DumpHeap -stat
 !DumpHeap -stat -type SomeType.OrAnother
+
 ```
 
 
